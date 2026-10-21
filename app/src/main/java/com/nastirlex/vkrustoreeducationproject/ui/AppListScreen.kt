@@ -28,7 +28,7 @@ fun AppListScreen(onAppClick: (CatalogApp) -> Unit) {
             TopAppBar(
                 title = { Text("Приложения") },
                 navigationIcon = {
-                    Image(painterResource(R.drawable.app_icon_0), "RuStore Education",
+                    Image(painterResource(R.drawable.ic_store), "RuStore Education",
                         Modifier.padding(start = 16.dp, end = 12.dp).size(36.dp).clip(RoundedCornerShape(10.dp)))
                 },
                 colors = TopAppBarDefaults.topAppBarColors(

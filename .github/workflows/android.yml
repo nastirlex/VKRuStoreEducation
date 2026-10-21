@@ -49,9 +49,13 @@ jobs:
           arch: x86_64
           profile: pixel_6
           disable-animations: true
-          script: ./gradlew :app:connectedDebugAndroidTest
+          script: |
+            ./gradlew :app:connectedDebugAndroidTest
+            adb pull /sdcard/Android/data/com.nastirlex.vkrustoreeducationproject/files/screenshots app/build/outputs/screenshots
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: ui-test-reports
-          path: app/build/reports/androidTests/
+          path: |
+            app/build/reports/androidTests/
+            app/build/outputs/screenshots/
