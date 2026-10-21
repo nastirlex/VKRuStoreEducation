@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
@@ -56,6 +57,7 @@ fun AppDetailsHeader(
             Spacer(Modifier.height(4.dp))
             Text(
                 text = appDetails.name,
+                modifier = Modifier.testTag("app-details-title"),
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.headlineSmall,
             )
@@ -86,7 +88,7 @@ fun AppDetailsHeader(
     }
 }
 
-// Используем сериализованные имена категорий, которые приходят из API
+// Подписи категорий сохранены из практического экрана.
 @Composable
 private fun getCategoryText(category: Category): String = when (category) {
     Category.APP -> "Приложения"

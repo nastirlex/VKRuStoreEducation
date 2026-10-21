@@ -9,7 +9,7 @@ data class CatalogApp(
     val summary: String,
     val categoryLabel: String,
     val category: Category,
-    @DrawableRes val iconRes: Int,
+    @param:DrawableRes val iconRes: Int,
     val developer: String,
 ) {
     fun details() = AppDetails(

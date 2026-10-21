@@ -16,7 +16,7 @@ class StoreNavigationTest {
         screenshot("catalog")
         compose.onNodeWithTag("app-music").performClick()
         compose.onNodeWithTag("app-details").assertIsDisplayed()
-        compose.onAllNodesWithText("Музыка").assertCountEquals(2)
+        compose.onNodeWithTag("app-details-title").assertTextEquals("Музыка").assertIsDisplayed()
         screenshot("details")
         compose.onNodeWithContentDescription("Назад").performClick()
         compose.onNodeWithTag("app-list").assertIsDisplayed()
