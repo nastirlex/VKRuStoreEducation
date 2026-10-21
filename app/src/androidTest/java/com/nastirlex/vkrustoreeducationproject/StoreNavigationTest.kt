@@ -1,10 +1,7 @@
 package com.nastirlex.vkrustoreeducationproject
 
-import android.graphics.Bitmap
 import android.os.ParcelFileDescriptor
-import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.test.platform.app.InstrumentationRegistry
-import java.io.File
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import org.junit.Rule
@@ -49,17 +46,11 @@ class StoreNavigationTest {
     }
     private fun screenshot(name: String) {
         compose.waitForIdle()
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-        val directory = File(context.getExternalFilesDir(null), "screenshots").apply { mkdirs() }
-        val file = File(directory, "$name.png")
-        file.outputStream().use { output ->
-            compose.onRoot().captureToImage().asAndroidBitmap().compress(Bitmap.CompressFormat.PNG, 100, output)
-        }
-        // UTP uninstalls the app after the run; keep CI images outside its data directory.
+        // Shell captures directly into shared storage, which survives UTP uninstall.
         val command = "mkdir -p /sdcard/Download/rustore-screenshots && " +
-            "cp ${file.absolutePath} /sdcard/Download/rustore-screenshots/$name.png"
+            "screencap -p /sdcard/Download/rustore-screenshots/$name.png && echo SCREENSHOT_SAVED"
         val result = InstrumentationRegistry.getInstrumentation().uiAutomation.executeShellCommand(command)
-        ParcelFileDescriptor.AutoCloseInputStream(result).use { it.readBytes() }
+        val output = ParcelFileDescriptor.AutoCloseInputStream(result).bufferedReader().use { it.readText() }
+        check("SCREENSHOT_SAVED" in output) { "Screenshot failed: $output" }
     }
-
 }

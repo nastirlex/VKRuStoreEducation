@@ -60,6 +60,7 @@ jobs:
           script: |
             ./gradlew :app:connectedDebugAndroidTest
             adb pull /sdcard/Download/rustore-screenshots app/build/outputs/screenshots
+            test -f app/build/outputs/screenshots/catalog.png
       - uses: actions/upload-artifact@v5
         if: always()
         with:
