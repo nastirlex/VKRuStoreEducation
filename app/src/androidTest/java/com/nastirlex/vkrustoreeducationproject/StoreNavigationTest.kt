@@ -46,11 +46,17 @@ class StoreNavigationTest {
     }
     private fun screenshot(name: String) {
         compose.waitForIdle()
-        // Shell captures directly into shared storage, which survives UTP uninstall.
-        val command = "mkdir -p /sdcard/Download/rustore-screenshots && " +
-            "screencap -p /sdcard/Download/rustore-screenshots/$name.png && echo SCREENSHOT_SAVED"
+        // Execute individual commands: UiAutomation does not interpret shell operators.
+        val directory = "/sdcard/Download/rustore-screenshots"
+        shell("mkdir -p $directory")
+        shell("screencap -p $directory/$name.png")
+        check(shell("ls $directory/$name.png").trim().endsWith("$name.png")) {
+            "Screenshot $name was not saved"
+        }
+    }
+
+    private fun shell(command: String): String {
         val result = InstrumentationRegistry.getInstrumentation().uiAutomation.executeShellCommand(command)
-        val output = ParcelFileDescriptor.AutoCloseInputStream(result).bufferedReader().use { it.readText() }
-        check("SCREENSHOT_SAVED" in output) { "Screenshot failed: $output" }
+        return ParcelFileDescriptor.AutoCloseInputStream(result).bufferedReader().use { it.readText() }
     }
 }
