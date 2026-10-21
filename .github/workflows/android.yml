@@ -59,7 +59,7 @@ jobs:
           disable-animations: true
           script: |
             ./gradlew :app:connectedDebugAndroidTest
-            adb pull /sdcard/Android/data/com.nastirlex.vkrustoreeducationproject/files/screenshots app/build/outputs/screenshots
+            adb pull /sdcard/Download/rustore-screenshots app/build/outputs/screenshots
       - uses: actions/upload-artifact@v5
         if: always()
         with:

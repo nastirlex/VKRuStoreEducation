@@ -1,6 +1,7 @@
 package com.nastirlex.vkrustoreeducationproject
 
 import android.graphics.Bitmap
+import android.os.ParcelFileDescriptor
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.test.platform.app.InstrumentationRegistry
 import java.io.File
@@ -50,9 +51,15 @@ class StoreNavigationTest {
         compose.waitForIdle()
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val directory = File(context.getExternalFilesDir(null), "screenshots").apply { mkdirs() }
-        File(directory, "$name.png").outputStream().use { output ->
+        val file = File(directory, "$name.png")
+        file.outputStream().use { output ->
             compose.onRoot().captureToImage().asAndroidBitmap().compress(Bitmap.CompressFormat.PNG, 100, output)
         }
+        // UTP uninstalls the app after the run; keep CI images outside its data directory.
+        val command = "mkdir -p /sdcard/Download/rustore-screenshots && " +
+            "cp ${file.absolutePath} /sdcard/Download/rustore-screenshots/$name.png"
+        val result = InstrumentationRegistry.getInstrumentation().uiAutomation.executeShellCommand(command)
+        ParcelFileDescriptor.AutoCloseInputStream(result).use { it.readBytes() }
     }
 
 }
