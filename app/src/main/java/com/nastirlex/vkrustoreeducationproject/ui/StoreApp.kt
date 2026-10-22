@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.nastirlex.vkrustoreeducationproject.data.AppCatalog
+import com.nastirlex.vkrustoreeducationproject.ui.applist.AppListRoute
 import com.nastirlex.vkrustoreeducationproject.ui.appdetails.AppDetailsContent
 import com.nastirlex.vkrustoreeducationproject.ui.appdetails.AppDetailsState
 import kotlinx.coroutines.launch
@@ -26,7 +27,7 @@ fun StoreApp() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = LIST) {
         composable(LIST) {
-            AppListScreen(onAppClick = { navController.navigate("apps/${it.id}") { launchSingleTop = true } })
+            AppListRoute(onAppClick = { navController.navigate("apps/${it.id}") { launchSingleTop = true } })
         }
         composable(DETAILS, arguments = listOf(navArgument("appId") { type = NavType.StringType })) { entry ->
             val app = AppCatalog.find(entry.arguments?.getString("appId"))
